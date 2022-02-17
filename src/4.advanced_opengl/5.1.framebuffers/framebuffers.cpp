@@ -13,6 +13,8 @@
 
 #include <iostream>
 
+#include <stb_image_write.h>
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -20,8 +22,8 @@ void processInput(GLFWwindow *window);
 unsigned int loadTexture(const char *path);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 100;
+const unsigned int SCR_HEIGHT = 100;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -32,6 +34,18 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+
+#define BMP_Header_Length 54
+void saveFrameBuff1(GLsizei width, GLsizei height, unsigned int framebuffer)
+{
+    // 因为是离屏渲染，此处设置读取的数据来源于我们自己设置的m_FboID对应的FBO
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+    GLubyte image_src[100 * 100 * 4];
+    glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, &image_src);
+
+    stbi_write_bmp("out.bmp", 100, 100, 4, image_src);
+}
 
 int main()
 {
@@ -222,7 +236,7 @@ int main()
 
     // render loop
     // -----------
-    while (!glfwWindowShouldClose(window))
+    //while (!glfwWindowShouldClose(window))
     {
         // per-frame time logic
         // --------------------
@@ -284,7 +298,9 @@ int main()
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
+        //glfwSwapBuffers(window);
+
+        saveFrameBuff1(SCR_WIDTH, SCR_HEIGHT, framebuffer);
         glfwPollEvents();
     }
 
@@ -300,6 +316,7 @@ int main()
     glfwTerminate();
     return 0;
 }
+
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------

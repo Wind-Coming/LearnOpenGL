@@ -2,6 +2,7 @@
 out vec4 FragColor;
 
 in vec2 TexCoords;
+in vec2 TexCoords2;
 
 uniform sampler2D texture_diffuse1;
 

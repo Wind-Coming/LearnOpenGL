@@ -7,6 +7,10 @@
 
 #include <iostream>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -131,6 +135,12 @@ int main()
         // bind Texture
         glBindTexture(GL_TEXTURE_2D, texture);
 
+        // glm::vec4 vec(1, 0, 0, 1);
+        // glm::mat4 trans;
+        //
+        // trans = glm::translate(trans, glm::vec3(1, 1, 1));
+        // vec = trans * vec;
+        
         // render container
         ourShader.use();
         glBindVertexArray(VAO);
